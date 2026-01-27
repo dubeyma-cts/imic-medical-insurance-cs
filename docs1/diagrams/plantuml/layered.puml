@@ -1,0 +1,7 @@
+@startuml
+package "Presentation (ASP.NET MVC/Blazor)" #DDFFDD
+package "API (ASP.NET Core)" #DDFFDD
+package "Application (CQRS)" #DDFFDD
+package "Domain (Entities/Aggregates)" #DDFFDD
+package "Infrastructure (EF Core/Integrations)" #DDFFDD
+@enduml

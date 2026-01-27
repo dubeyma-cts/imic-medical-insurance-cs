@@ -1,0 +1,15 @@
+sequenceDiagram
+  autonumber
+  participant Agent
+  participant Web as Internet Site
+  participant API as API Gateway
+  participant Claims as Claims Service
+  participant Staff as Company Staff App
+
+  Agent->>Web: Submit claim with docs
+  Web->>API: CreateClaim()
+  API->>Claims: Validate & Persist
+  Claims-->>API: status=Sent for approval
+  Staff->>Claims: Review & Decide
+  Claims-->>API: Accepted/Rejected (+cheque details)
+  API-->>Web: Update status

@@ -1,8 +1,3 @@
-#usecases
-It covers the top‑level actors (Policyholder, Provider, Ops, Finance, Payment Gateway, Underwriter) 
-and the ten use cases, including <<includes>> relations (e.g., Purchase includes Premium Payment, Claim includes Payout).
-
-
 @startuml
 ' Use-case overview for IMIC
 ' File: docs/90-diagrams/plantuml/usecases.puml
@@ -68,6 +63,7 @@ Finance ..> UC06 : <<participates>>
 Finance ..> UC05 : <<participates>>
 
 @enduml
+
 
 
 

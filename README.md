@@ -33,10 +33,10 @@ The platform is designed to be:
 - **Testing** → `imic-medical-insurance-cs/docs/testing/`
 - **Use-Cases** → `imic-medical-insurance-cs/docs/use-cases/`
 - **ADRs** → `imic-medical-insurance-cs/docs/adr/`
-- **Specs** → `imic-medical-insurance-cs/README.md`
-- **Testing** → `imic-medical-insurance-cs/SECURITY.md`
-- **Use-Cases** → `imic-medical-insurance-cs/CONTRIBUTING.md`
-- **ADRs** → `imic-medical-insurance-cs/VERSION`
+- **ReadMe** → `imic-medical-insurance-cs/README.md` #Project Information
+- **Core Case Study** → `imic-medical-insurance-cs/case_study_2_imic.md` #Case Study Details
+- **Contributors** → `imic-medical-insurance-cs/CONTRIBUTING.md` #Project Contributors/Team
+- **Api Versons** → `imic-medical-insurance-cs/VERSION`
 
 ## ✨ Features
 

@@ -132,8 +132,10 @@ Users must be able to go to any screen with minimum mouse-clicks.
 
 After three consecutive invalid logon attempts, a user’s login account should be locked. This login account can only be re-activated manually.
 
-1.  Deliverables
+---
 
+### Deliverables ###
+---
 Trainees are expected to deliver the following SDLC artifacts in the form of **_documents_**:
 
 *   Use Case Documents

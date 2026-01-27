@@ -1,1 +1,0 @@
-# Platform Reference Architecture

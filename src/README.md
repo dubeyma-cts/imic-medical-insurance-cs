@@ -1,1 +1,1 @@
-# IMIC – Architecture Documentation Index
+# IMIC – Source Code

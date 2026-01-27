@@ -1,2 +1,4 @@
-## usecases
-It covers the top‑level actors (Policyholder, Provider, Ops, Finance, Payment Gateway, Underwriter) and the ten use cases, including <<includes>> relations (e.g., Purchase includes Premium Payment, Claim includes Payout).
+#usecases
+It covers the top‑level actors (Policyholder, Provider, Ops, Finance, Payment Gateway, Underwriter) 
+and the ten use cases, including <<includes>> relations (e.g., Purchase includes Premium Payment, Claim includes Payout).
+

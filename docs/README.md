@@ -17,7 +17,7 @@ This contains architecture artifacts aligned to the IMIC case study: use cases, 
 - **Quality & NFRs** → `quality/`
 - **Security** → `security/`
 - **Specs** → `Specs/`
-- **Testing** → `testing`
+- **Testing** → `testing/`
 - **Use-Cases** → `use-cases/`
 
 ## Conventions

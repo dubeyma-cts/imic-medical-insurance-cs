@@ -1,13 +1,14 @@
 # IMIC – Architecture Documentation Index (Case Study)
+Welcome! This folder hosts all architecture artifacts using a **docs-as-code** approach.
+
 
 Generated: Manish Dubey 2026-01-27
+
 ---
 
 This contains architecture artifacts aligned to the IMIC case study: use cases, functional specs, C4 views, layered & component diagrams, cross-cutting concerns, security, NFRs, ER model, and test planning skeletons.
----
-# IMIC – Architecture Documentation Index
 
-Welcome! This folder hosts all architecture artifacts using a **docs-as-code** approach.
+---
 
 ## Navigation
 - **architecture** → `architecture/` (standards, templates, checklists, decision log)

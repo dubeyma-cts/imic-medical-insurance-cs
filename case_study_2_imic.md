@@ -146,21 +146,12 @@ They are also expected to deliver the following SDLC artifacts on **_paper_**:
 *   Activity Diagrams
 *   Use Case Diagrams
 *   Sequence Diagrams
-
-New Projects
-
-Use Cases and Use Diagrams
-
-Component Diagrams
-
-Layered Diagrams
-
-Cross Cutting Concerns
-
-Multitier Diagrams
-
-Architectures and their Tradeoff Analysis
-
+*   Create a New Projects
+*   Use Cases and Use Diagrams
+*   Component Diagrams
+*   Layered Diagrams
+*   Cross Cutting Concerns
+*   Multitier Diagrams
+*   Architectures and their Tradeoff Analysis
 *   Performance and Reliability Tradeoff
-
-ER Diagrams
+*   ER Diagrams

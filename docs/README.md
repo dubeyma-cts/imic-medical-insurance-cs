@@ -1,5 +1,4 @@
 # IMIC – Architecture (Case Study)
----
 
 Generated: Manish Dubey 2026-01-27
 ---

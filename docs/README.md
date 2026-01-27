@@ -3,4 +3,4 @@
 Generated: Manish Dubey 2026-01-27
 ---
 
-This pack contains architecture artifacts aligned to the IMIC case study: use cases, functional specs, C4 views, layered & component diagrams, cross-cutting concerns, security, NFRs, ER model, and test planning skeletons.
+This contains architecture artifacts aligned to the IMIC case study: use cases, functional specs, C4 views, layered & component diagrams, cross-cutting concerns, security, NFRs, ER model, and test planning skeletons.

@@ -5,7 +5,7 @@
 **Date:** 2026-01-27
 
 ## 1. Purpose & Scope
-This document defines the non‑functional requirements (NFRs) and service objectives for the IMIC platform built on .NET 8. It covers the member Web Portal, API Gateway, and backend services: Policy, Claims, Payments, and Members. Targets apply to **Production** unless stated; **Staging** should meet or exceed these prior to release.
+This document defines the non‑functional requirements (NFRs) and service objectives for the IMIC platform built on .NET. It covers the member Web Portal, API Gateway, and backend services: Policy, Claims, Payments, and Members. Targets apply to **Production** unless stated; **Staging** should meet or exceed these prior to release.
 
 ## 2. Assumptions
 - Azure hosting (App Service/AKS), managed DB (Azure SQL or PostgreSQL), Redis cache, and Azure Service Bus/Kafka.

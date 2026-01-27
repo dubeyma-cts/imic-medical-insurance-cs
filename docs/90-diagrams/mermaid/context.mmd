@@ -1,2 +1,5 @@
+
 flowchart LR
-A --> B
+  A[Policyholder] --> B(Web Portal)
+  B -->|OIDC| C[Azure Entra ID]
+  B -->|Payments| D[Payment Gateway]

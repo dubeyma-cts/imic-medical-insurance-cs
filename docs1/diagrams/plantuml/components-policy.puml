@@ -1,9 +1,0 @@
-@startuml
-component "Policy API" as api
-component "Premium Calculator" as calc
-component "Document Service" as docs
-component "Underwriting Workflow" as uw
-api --> calc
-api --> docs
-api --> uw
-@enduml

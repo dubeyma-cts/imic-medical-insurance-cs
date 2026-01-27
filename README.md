@@ -27,22 +27,30 @@ The platform is designed to be:
 - **Maintainable** (clear separation of concerns & modular services)
 
 
-## 📂 Project Folder Structure
-imic/
-├─ src/                  # Application source code
-│  ├─ Services/          # Microservices (Policy, Claims, Payments, Members)
-│  ├─ Web/               # Web portal (ASP.NET MVC/Blazor)
-│  ├─ Gateways/          # API Gateway (YARP/Ocelot)
-│  └─ Shared/            # Shared domain, application, infrastructure
-├─ tests/                # Unit, Integration, E2E tests
-├─ docs/                 # Architecture, ADRs, diagrams, specs
-├─ .github/              # CI/CD workflows, templates, code owners
-├─ tools/                # Scripts, infrastructure helpers
-├─ README.md
-├─ SECURITY.md
-├─ CONTRIBUTING.md
-└─ VERSION
+## 📂 Project Folder Structure - Navigation
 
+- **imic-medical-insurance-cs** #Root repository
+- **Code** → `imic-medical-insurance-cs/src/` #Application source code
+- **Services** → `imic-medical-insurance-cssrc/Services/` #Microservices (Policy, Claims, Payments, Members)
+- **Web** → `imic-medical-insurance-cs/src/Web/` #Web portal (ASP.NET MVC/Blazor)
+- **Gateways** → `imic-medical-insurance-cs/src/Gateways/` #API Gateway
+- **Shared** → `imic-medical-insurance-cssrc/Shared/` #Shared domain, application, infrastructure
+- **Tests** → `imic-medical-insurance-cs/tests/` #Unit, Integration, E2E tests
+- **Tools** → `imic-medical-insurance-cs/tools/` #Scripts, infrastructure helpers
+- **Docs** → `imic-medical-insurance-cs/docs/` #Architecture, ADRs, diagrams, specs
+- **architecture** → `imic-medical-insurance-cs/docs/architecture/` #standards, templates, checklists, decision log
+- **Data** → `imic-medical-insurance-cs/docs/data/`
+- **Diagrams** → `imic-medical-insurance-cs/docs/diagrams/`
+- **Quality & NFRs** → `imic-medical-insurance-cs/docs/quality/`
+- **Security** → `imic-medical-insurance-cs/docs/security/`
+- **Specs** → `imic-medical-insurance-cs/docs/Specs/`
+- **Testing** → `imic-medical-insurance-cs/docs/testing/`
+- **Use-Cases** → `imic-medical-insurance-cs/docs/use-cases/`
+- **ADRs** → `imic-medical-insurance-cs/docs/adr/`
+- **Specs** → `imic-medical-insurance-cs/README.md`
+- **Testing** → `imic-medical-insurance-cs/SECURITY.md`
+- **Use-Cases** → `imic-medical-insurance-cs/CONTRIBUTING.md`
+- **ADRs** → `imic-medical-insurance-cs/VERSION`
 
 ## ✨ Features
 

@@ -19,10 +19,11 @@ This contains architecture artifacts aligned to the IMIC case study: use cases, 
 - **Specs** → `Specs/`
 - **Testing** → `testing/`
 - **Use-Cases** → `use-cases/`
+- **ADRs** → `adr/`
 
 ## Conventions
 - **Format**: Markdown (`.md`), PlantUML (`.puml`), Mermaid (`.mmd`), OpenAPI (`.yaml`)
 - **IDs**: Use stable IDs for ADRs: `NNNN-title.md`
-- **Reviews**: Architecture PRs require architect approval + security review for changes in `50-security/`
+- **Reviews**: Architecture PRs require architect approval + security review for changes in `security/`
 - **Updates**: Any significant structural or technology change must include an ADR
 

@@ -24,7 +24,7 @@ The platform is designed to be:
 - **Tests** → `imic-medical-insurance-cs/tests/` #Unit, Integration, E2E tests
 - **Tools** → `imic-medical-insurance-cs/tools/` #Scripts, infrastructure helpers
 - **Docs** → `imic-medical-insurance-cs/docs/` #Architecture, ADRs, diagrams, specs
-- **architecture** → `imic-medical-insurance-cs/docs/architecture/` #standards, templates, checklists, decision log
+- **Architecture** → `imic-medical-insurance-cs/docs/architecture/` #standards, templates, checklists, decision log
 - **Data** → `imic-medical-insurance-cs/docs/data/`
 - **Diagrams** → `imic-medical-insurance-cs/docs/diagrams/`
 - **Quality & NFRs** → `imic-medical-insurance-cs/docs/quality/`

@@ -27,6 +27,7 @@ The platform is designed to be:
 - **Architecture** → `imic-medical-insurance-cs/docs/architecture/` #standards, templates, checklists, decision log
 - **Data** → `imic-medical-insurance-cs/docs/data/`
 - **Diagrams** → `imic-medical-insurance-cs/docs/diagrams/`
+- **Governance** → `imic-medical-insurance-cs/docs/governance/`
 - **Quality & NFRs** → `imic-medical-insurance-cs/docs/quality/`
 - **Security** → `imic-medical-insurance-cs/docs/security/`
 - **Specs** → `imic-medical-insurance-cs/docs/Specs/`

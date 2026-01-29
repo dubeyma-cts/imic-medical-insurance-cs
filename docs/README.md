@@ -14,6 +14,7 @@ This contains architecture artifacts aligned to the IMIC case study: use cases, 
 - **architecture** → `architecture/` (standards, templates, checklists, decision log)
 - **Data** → `data/`
 - **Diagrams** → `diagrams/`
+- **Governance** → `governance/`
 - **Quality & NFRs** → `quality/`
 - **Security** → `security/`
 - **Specs** → `Specs/`

@@ -1,0 +1,149 @@
+graph TB
+    subgraph UserZone["User Zone"]
+        AGENT[Agent]
+        HOLDER[Policy Holder]
+        STAFF[Company Staff]
+    end
+
+    subgraph UploadPipeline["🔒 Document Upload Security Pipeline"]
+        UPLOAD[Upload Handler<br/>File Type & Size Check]
+        VALIDATE[Input Validator<br/>Path Traversal Prevention]
+        QUARANTINE[Quarantine Zone<br/>Temporary Storage]
+        SCANNER[Malware Scanner<br/>Real-time Analysis]
+        REJECT[Reject & Delete<br/>Alert Security Team]
+        ENCRYPT_DOC[Document Encryption<br/>AES-256]
+    end
+
+    subgraph DataProtection["🛡️ Data Protection Layer"]
+        ENCRYPT_API[Encryption Service]
+        KEY_VAULT[Key Vault<br/>KMS]
+        HASH_SERVICE[Hashing Service<br/>bcrypt/Argon2]
+        MASK_SERVICE[Data Masking<br/>PII/PHI Protection]
+    end
+
+    subgraph SecureStorage["🔐 Secure Storage"]
+        DOC_STORE[(Document Storage<br/>Encrypted at Rest)]
+        USER_DATA[(User Database<br/>Encrypted)]
+        POLICY_DATA[(Policy Database<br/>Encrypted)]
+        MEDICAL_DATA[(Medical Records<br/>Encrypted + Access Controlled)]
+    end
+
+    subgraph AccessControl["Access Control & Audit"]
+        RBAC[RBAC Engine]
+        PERMISSION[Permission Check]
+        AUDIT_LOG[Audit Logger]
+        AUDIT_STORE[(Audit Trail<br/>Immutable)]
+    end
+
+    subgraph DataRetrieval["📄 Secure Data Retrieval"]
+        DECRYPT[Decryption Service]
+        FILTER[Data Filtering<br/>Role-based]
+        REDACT[PII Redaction]
+        DISPLAY[Display Handler]
+    end
+
+    subgraph Monitoring["📊 Security Monitoring"]
+        DETECTOR[Threat Detector]
+        ANOMALY[Anomaly Detection<br/>Unusual Access Patterns]
+        ALERT[Alert System]
+    end
+
+    %% Upload Flow
+    AGENT -->|Upload Medical Reports<br/>Age Proof, Hospital Bills| UPLOAD
+    UPLOAD --> VALIDATE
+    VALIDATE --> QUARANTINE
+    QUARANTINE --> SCANNER
+    
+    SCANNER -->|Malware Detected| REJECT
+    REJECT -.->|Alert| ALERT
+    REJECT --> AUDIT_LOG
+    
+    SCANNER -->|Clean File| ENCRYPT_DOC
+    ENCRYPT_DOC --> KEY_VAULT
+    ENCRYPT_DOC --> DOC_STORE
+    ENCRYPT_DOC --> AUDIT_LOG
+
+    %% Data Protection
+    AGENT -->|Create Policy/Claim| ENCRYPT_API
+    STAFF -->|Approve/Reject| ENCRYPT_API
+    
+    ENCRYPT_API --> KEY_VAULT
+    ENCRYPT_API --> HASH_SERVICE
+    HASH_SERVICE --> USER_DATA
+    ENCRYPT_API --> POLICY_DATA
+    ENCRYPT_API --> MEDICAL_DATA
+    
+    %% Data Retrieval Flow
+    HOLDER -->|View Personal Data| PERMISSION
+    AGENT -->|View Policy Status| PERMISSION
+    STAFF -->|Review Documents| PERMISSION
+    
+    PERMISSION --> RBAC
+    RBAC -->|Authorized| DECRYPT
+    RBAC -.->|Unauthorized| AUDIT_LOG
+    RBAC -.->|Unauthorized| ALERT
+    
+    DECRYPT --> KEY_VAULT
+    DECRYPT --> DOC_STORE
+    DECRYPT --> USER_DATA
+    DECRYPT --> POLICY_DATA
+    DECRYPT --> MEDICAL_DATA
+    
+    DECRYPT --> FILTER
+    FILTER --> REDACT
+    REDACT --> MASK_SERVICE
+    REDACT --> DISPLAY
+    
+    DISPLAY --> HOLDER
+    DISPLAY --> AGENT
+    DISPLAY --> STAFF
+
+    %% Audit Trail
+    UPLOAD -.->|Log Upload| AUDIT_LOG
+    VALIDATE -.->|Log Validation| AUDIT_LOG
+    SCANNER -.->|Log Scan Result| AUDIT_LOG
+    ENCRYPT_DOC -.->|Log Encryption| AUDIT_LOG
+    PERMISSION -.->|Log Access| AUDIT_LOG
+    RBAC -.->|Log Authorization| AUDIT_LOG
+    DECRYPT -.->|Log Decryption| AUDIT_LOG
+    
+    AUDIT_LOG --> AUDIT_STORE
+
+    %% Monitoring
+    AUDIT_LOG --> DETECTOR
+    PERMISSION -.->|Access Patterns| ANOMALY
+    RBAC -.->|Auth Patterns| ANOMALY
+    DETECTOR --> ANOMALY
+    
+    ANOMALY -->|Suspicious Activity| ALERT
+    ALERT -.->|Notify| STAFF
+
+    %% Encryption Standards
+    subgraph EncryptionStandards["🔑 Encryption Standards"]
+        TLS[TLS 1.2+ in Transit]
+        AES[AES-256 at Rest]
+        BCRYPT[bcrypt for Passwords]
+    end
+    
+    UPLOAD -.->|Uses| TLS
+    ENCRYPT_API -.->|Uses| AES
+    HASH_SERVICE -.->|Uses| BCRYPT
+
+    %% Styling
+    classDef user fill:#e3f2fd,stroke:#1976d2,stroke-width:2px
+    classDef upload fill:#fff3e0,stroke:#f57c00,stroke-width:2px
+    classDef protect fill:#fce4ec,stroke:#c2185b,stroke-width:2px
+    classDef storage fill:#f3e5f6,stroke:#7b1fa2,stroke-width:3px
+    classDef access fill:#e8f5e9,stroke:#388e3c,stroke-width:2px
+    classDef retrieve fill:#e0f2f1,stroke:#00796b,stroke-width:2px
+    classDef monitor fill:#ffebee,stroke:#d32f2f,stroke-width:2px
+    classDef standard fill:#f5f5f5,stroke:#616161,stroke-width:1px
+    
+    class AGENT,HOLDER,STAFF user
+    class UPLOAD,VALIDATE,QUARANTINE,SCANNER,REJECT,ENCRYPT_DOC upload
+    class ENCRYPT_API,KEY_VAULT,HASH_SERVICE,MASK_SERVICE protect
+    class DOC_STORE,USER_DATA,POLICY_DATA,MEDICAL_DATA,AUDIT_STORE storage
+    class RBAC,PERMISSION,AUDIT_LOG access
+    class DECRYPT,FILTER,REDACT,DISPLAY retrieve
+    class DETECTOR,ANOMALY,ALERT monitor
+    class TLS,AES,BCRYPT standard

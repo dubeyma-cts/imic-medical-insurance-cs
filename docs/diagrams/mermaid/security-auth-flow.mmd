@@ -1,0 +1,116 @@
+sequenceDiagram
+    actor User as User<br/>(Policy Holder/Agent/Staff)
+    participant UI as Web Application
+    participant AUTH as Authentication Service
+    participant LOCKOUT as Lockout Manager
+    participant SESSION as Session Service
+    participant AUTHZ as Authorization Service
+    participant RBAC as RBAC Engine
+    participant AUDIT as Audit Logger
+    participant DB as User Database
+
+    %% Login Attempt
+    User->>UI: Enter username & password
+    UI->>AUTH: Validate credentials
+    AUTH->>DB: Check account status
+    
+    alt Account is Locked
+        DB-->>AUTH: Account locked
+        AUTH->>AUDIT: Log login attempt on locked account
+        AUTH-->>UI: Account locked error
+        UI-->>User: Account locked. Contact admin.
+    else Account is Active
+        AUTH->>DB: Verify password hash
+        
+        alt Valid Credentials
+            DB-->>AUTH: Password matches
+            AUTH->>LOCKOUT: Reset failed attempt counter
+            LOCKOUT->>DB: Set failed_attempts = 0
+            AUTH->>SESSION: Create session
+            SESSION->>SESSION: Generate secure token
+            SESSION->>SESSION: Set expiry - 15 min timeout
+            SESSION->>DB: Store session
+            AUTH->>AUDIT: Log successful login<br/>user, timestamp, IP
+            AUTH-->>UI: Authentication successful + token
+            UI->>UI: Store session token
+            UI-->>User: Redirect to home page
+            
+            %% Session Activity Loop
+            loop Every User Action
+                User->>UI: Perform action
+                UI->>SESSION: Validate session token
+                SESSION->>DB: Check session validity
+                
+                alt Session Valid and Not Expired
+                    DB-->>SESSION: Session active
+                    SESSION->>SESSION: Update last activity time
+                    SESSION-->>UI: Session valid
+                    UI->>AUTHZ: Check permissions for action
+                    AUTHZ->>RBAC: Get user role
+                    RBAC->>DB: Query user role
+                    DB-->>RBAC: Role: Policy Holder/Agent/Staff
+                    RBAC->>RBAC: Check role permissions
+                    
+                    alt Permission Granted
+                        RBAC-->>AUTHZ: Authorized
+                        AUTHZ->>AUDIT: Log authorized access
+                        AUTHZ-->>UI: Access granted
+                        UI->>UI: Execute action
+                        UI-->>User: Display result
+                    else Permission Denied
+                        RBAC-->>AUTHZ: Unauthorized
+                        AUTHZ->>AUDIT: Log unauthorized attempt<br/>HIGH SEVERITY
+                        AUTHZ-->>UI: Access denied
+                        UI-->>User: Permission denied
+                    end
+                    
+                else Session Expired - 15 min
+                    DB-->>SESSION: Session expired
+                    SESSION->>SESSION: Invalidate session
+                    SESSION->>DB: Delete session
+                    SESSION->>AUDIT: Log session timeout
+                    SESSION-->>UI: Session expired
+                    UI->>UI: Clear session token
+                    UI-->>User: Session expired. Please login.
+                end
+            end
+            
+        else Invalid Credentials
+            DB-->>AUTH: Password mismatch
+            AUTH->>LOCKOUT: Increment failed attempt counter
+            LOCKOUT->>DB: failed_attempts++
+            LOCKOUT->>DB: Get updated failed_attempts count
+            DB-->>LOCKOUT: Current count
+            
+            alt Attempt 1 or 2
+                LOCKOUT->>AUDIT: Log failed login attempt<br/>user, timestamp, IP, attempt number
+                LOCKOUT-->>AUTH: Account still active
+                AUTH-->>UI: Invalid credentials - attempt X of 3
+                UI-->>User: Invalid credentials. Attempt X of 3.
+            else Attempt 3 - Lockout
+                LOCKOUT->>DB: Set account_status = LOCKED
+                LOCKOUT->>AUDIT: Log account lockout<br/>user, timestamp, IP
+                LOCKOUT->>LOCKOUT: Notify administrator
+                LOCKOUT-->>AUTH: Account locked
+                AUTH-->>UI: Account locked error
+                UI-->>User: Account locked after 3 failed attempts. Contact administrator.
+            end
+        end
+    end
+
+    %% Manual Unlock - Separate Flow
+    Note over User,DB: Manual Unlock Flow - Admin Action
+    actor Admin as Administrator
+    participant ADMIN_UI as Admin Portal
+    
+    Admin->>ADMIN_UI: Unlock user account
+    ADMIN_UI->>AUTH: Request unlock
+    AUTH->>DB: Verify admin permissions
+    DB-->>AUTH: Admin authorized
+    AUTH->>LOCKOUT: Unlock account
+    LOCKOUT->>DB: Set account_status = 'ACTIVE'
+    LOCKOUT->>DB: Set failed_attempts = 0
+    LOCKOUT->>AUDIT: Log account unlock<br/>admin_id, user_id, timestamp
+    LOCKOUT-->>ADMIN_UI: Account unlocked
+    ADMIN_UI-->>Admin: Success notification
+    LOCKOUT->>User: Send email: Account unlocked

@@ -1,0 +1,146 @@
+graph TB
+    subgraph Presentation["Presentation Layer"]
+        PH_UI[Policy Holder UI<br/>Read-only Views]
+        AG_UI[Agent UI<br/>Create/Submit]
+        CO_UI[Company Staff UI<br/>Approve/Reject]
+    end
+
+    subgraph SecurityServices["Security Services Layer"]
+        subgraph IAM["Identity & Access Management"]
+            AUTH[Authentication Service]
+            LOCKOUT[Account Lockout Manager<br/>3 Failed Attempts]
+            PWDMGR[Password Manager<br/>Policy Enforcement]
+            RESET[Password Reset Service<br/>Token-based]
+        end
+        
+        subgraph AccessControl["Access Control"]
+            AUTHZ[Authorization Service]
+            RBAC[RBAC Engine<br/>Policy Holder/Agent/Staff]
+            PERMISSION[Permission Validator]
+        end
+        
+        subgraph SessionMgmt["Session Management"]
+            SESSION[Session Service]
+            TIMEOUT[Timeout Manager<br/>15 Minutes]
+            TOKEN[Token Manager]
+        end
+    end
+
+    subgraph DataSecurity["Data Security Layer"]
+        ENCRYPT[Encryption Service<br/>AES-256]
+        CRYPTO[Cryptographic Service<br/>Hashing/Signing]
+        MASK[Data Masking Service]
+        KEY[Key Management Service]
+    end
+
+    subgraph DocumentSecurity["Document Security"]
+        UPLOAD[Upload Handler]
+        SCANNER[Malware Scanner]
+        QUARANTINE[Quarantine Zone]
+        DOC_ENCRYPT[Document Encryption]
+        DOC_STORE[(Secure Document<br/>Storage)]
+    end
+
+    subgraph AuditCompliance["Audit & Compliance"]
+        AUDIT[Audit Logger]
+        TRAIL[Audit Trail Store]
+        COMPLIANCE[Compliance Reporter]
+        RETENTION[Data Retention Manager<br/>7 Years]
+    end
+
+    subgraph Monitoring["Security Monitoring"]
+        DETECTOR[Threat Detector]
+        ANOMALY[Anomaly Detection]
+        ALERTING[Alert Manager]
+        INCIDENT[Incident Response]
+    end
+
+    subgraph DataLayer["Data Storage Layer"]
+        USER_DB[(User Database<br/>Encrypted)]
+        POLICY_DB[(Policy Database<br/>Encrypted)]
+        CLAIM_DB[(Claims Database<br/>Encrypted)]
+        AUDIT_DB[(Audit Database<br/>Immutable)]
+    end
+
+    %% UI to Security Services
+    PH_UI --> AUTH
+    AG_UI --> AUTH
+    CO_UI --> AUTH
+    
+    %% Authentication Flow
+    AUTH --> LOCKOUT
+    AUTH --> PWDMGR
+    AUTH --> CRYPTO
+    LOCKOUT -.->|Lock Account| USER_DB
+    RESET --> TOKEN
+    RESET --> PWDMGR
+    
+    %% Authorization Flow
+    PH_UI --> AUTHZ
+    AG_UI --> AUTHZ
+    CO_UI --> AUTHZ
+    AUTHZ --> RBAC
+    RBAC --> PERMISSION
+    PERMISSION --> USER_DB
+    
+    %% Session Management
+    AUTH --> SESSION
+    SESSION --> TIMEOUT
+    SESSION --> TOKEN
+    TIMEOUT -.->|Invalidate| SESSION
+    
+    %% Data Security
+    PWDMGR --> CRYPTO
+    POLICY_DB --> ENCRYPT
+    CLAIM_DB --> ENCRYPT
+    USER_DB --> ENCRYPT
+    ENCRYPT --> KEY
+    
+    %% Document Flow
+    AG_UI --> UPLOAD
+    UPLOAD --> SCANNER
+    SCANNER --> QUARANTINE
+    SCANNER -->|Clean| DOC_ENCRYPT
+    SCANNER -.->|Malware| ALERTING
+    DOC_ENCRYPT --> DOC_STORE
+    DOC_ENCRYPT --> KEY
+    
+    %% Audit Flow
+    AUTH -.->|Log Events| AUDIT
+    AUTHZ -.->|Log Events| AUDIT
+    SESSION -.->|Log Events| AUDIT
+    LOCKOUT -.->|Log Events| AUDIT
+    UPLOAD -.->|Log Events| AUDIT
+    SCANNER -.->|Log Events| AUDIT
+    PERMISSION -.->|Log Events| AUDIT
+    AUDIT --> TRAIL
+    TRAIL --> AUDIT_DB
+    TRAIL --> COMPLIANCE
+    COMPLIANCE --> RETENTION
+    
+    %% Monitoring Flow
+    AUDIT --> DETECTOR
+    DETECTOR --> ANOMALY
+    ANOMALY --> ALERTING
+    ALERTING --> INCIDENT
+    
+    %% Data Access
+    PERMISSION --> POLICY_DB
+    PERMISSION --> CLAIM_DB
+    PERMISSION --> MASK
+    MASK --> PH_UI
+    
+    %% Styling
+    classDef ui fill:#e1f5ff,stroke:#01579b,stroke-width:2px
+    classDef security fill:#fff3e0,stroke:#e65100,stroke-width:2px
+    classDef data fill:#f3e5f5,stroke:#4a148c,stroke-width:2px
+    classDef audit fill:#e8f5e9,stroke:#1b5e20,stroke-width:2px
+    classDef monitor fill:#ffebee,stroke:#b71c1c,stroke-width:2px
+    classDef storage fill:#ede7f6,stroke:#311b92,stroke-width:3px
+    
+    class PH_UI,AG_UI,CO_UI ui
+    class AUTH,LOCKOUT,PWDMGR,RESET,AUTHZ,RBAC,PERMISSION,SESSION,TIMEOUT,TOKEN security
+    class ENCRYPT,CRYPTO,MASK,KEY,DOC_ENCRYPT,UPLOAD,SCANNER,QUARANTINE,DOC_STORE data
+    class AUDIT,TRAIL,COMPLIANCE,RETENTION audit
+    class DETECTOR,ANOMALY,ALERTING,INCIDENT monitor
+    class USER_DB,POLICY_DB,CLAIM_DB,AUDIT_DB storage

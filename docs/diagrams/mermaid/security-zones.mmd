@@ -1,0 +1,108 @@
+graph TB
+    subgraph Internet["🌐 Internet Zone (Untrusted)"]
+        PH[Policy Holder Browser]
+        AG[Agent Browser]
+        EXT[External Threats]
+    end
+
+    subgraph DMZ["DMZ - Demilitarized Zone"]
+        WAF[Web Application Firewall]
+        LB[Load Balancer with TLS]
+        
+        subgraph WebServers["Web Application Servers"]
+            PH_APP[Policy Holder Portal]
+            AG_APP[Agent Portal]
+        end
+    end
+
+    subgraph IntranetZone["🏢 Intranet Zone (Trusted)"]
+        VPN[VPN Gateway]
+        
+        subgraph IntranetApps["Intranet Applications"]
+            CO_APP[Company Staff Portal]
+        end
+    end
+
+    subgraph AppZone["Application Services Zone"]
+        AUTH[Authentication Service<br/>Account Lockout Logic]
+        AUTHZ[Authorization Service<br/>RBAC Engine]
+        SESSION[Session Management<br/>15-min Timeout]
+        API[API Gateway<br/>Rate Limiting]
+        SCAN[Malware Scanner]
+        AUDIT[Audit Logging Service]
+    end
+
+    subgraph DataZone["🔒 Data Zone (Highly Protected)"]
+        DB[(Encrypted Database<br/>PII/PHI Data)]
+        DOC_STORE[(Document Storage<br/>Encrypted at Rest)]
+        BACKUP[(Encrypted Backups)]
+    end
+
+    subgraph SecurityMonitoring["🛡️ Security & Monitoring"]
+        SIEM[SIEM / Log Analytics]
+        IDS[Intrusion Detection]
+        ALERT[Alerting System]
+    end
+
+    %% Internet to DMZ
+    PH -->|HTTPS Only| WAF
+    AG -->|HTTPS Only| WAF
+    EXT -.->|Blocked| WAF
+    
+    %% DMZ connections
+    WAF --> LB
+    LB --> PH_APP
+    LB --> AG_APP
+    
+    %% Intranet connections
+    VPN -->|Internal Network| CO_APP
+    
+    %% Application to Services
+    PH_APP --> API
+    AG_APP --> API
+    CO_APP --> API
+    
+    API --> AUTH
+    API --> AUTHZ
+    API --> SESSION
+    AG_APP --> SCAN
+    
+    %% Services to Data
+    AUTH --> DB
+    AUTHZ --> DB
+    API --> DB
+    SCAN --> DOC_STORE
+    API --> DOC_STORE
+    
+    %% Audit connections
+    AUTH -.->|Logs| AUDIT
+    AUTHZ -.->|Logs| AUDIT
+    SESSION -.->|Logs| AUDIT
+    API -.->|Logs| AUDIT
+    PH_APP -.->|Logs| AUDIT
+    AG_APP -.->|Logs| AUDIT
+    CO_APP -.->|Logs| AUDIT
+    
+    %% Monitoring connections
+    AUDIT --> SIEM
+    IDS -.->|Network Traffic| SIEM
+    SIEM --> ALERT
+    
+    %% Backup
+    DB -.->|Automated| BACKUP
+    DOC_STORE -.->|Automated| BACKUP
+
+    %% Styling
+    classDef untrusted fill:#ffcccc,stroke:#cc0000,stroke-width:3px
+    classDef dmz fill:#fff4cc,stroke:#ff9900,stroke-width:2px
+    classDef trusted fill:#ccffcc,stroke:#00cc00,stroke-width:2px
+    classDef secure fill:#cce5ff,stroke:#0066cc,stroke-width:2px
+    classDef data fill:#e6ccff,stroke:#9933ff,stroke-width:3px
+    classDef monitor fill:#ffe6cc,stroke:#ff6600,stroke-width:2px
+    
+    class PH,AG,EXT untrusted
+    class WAF,LB,PH_APP,AG_APP dmz
+    class VPN,CO_APP,IntranetApps trusted
+    class AUTH,AUTHZ,SESSION,API,SCAN,AUDIT secure
+    class DB,DOC_STORE,BACKUP data
+    class SIEM,IDS,ALERT monitor

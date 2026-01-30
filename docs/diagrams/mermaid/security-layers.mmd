@@ -1,0 +1,179 @@
+graph TB
+    subgraph Layer1["🌐 Layer 1: Perimeter Security"]
+        FIREWALL[Firewall<br/>IP Filtering & Port Control]
+        WAF[Web Application Firewall<br/>OWASP Top 10 Protection]
+        DDOS[DDoS Protection<br/>Rate Limiting]
+        IDS[Intrusion Detection System]
+    end
+
+    subgraph Layer2["🔐 Layer 2: Network Security"]
+        subgraph NetworkSeg["Network Segmentation"]
+            DMZ[DMZ Network<br/>Internet-facing Apps]
+            INTRANET[Intranet Network<br/>Company Apps Only]
+            DB_NET[Database Network<br/>Isolated]
+        end
+        
+        VPN[VPN Gateway<br/>Encrypted Tunnel]
+        TLS[TLS 1.2+ Enforcement<br/>Certificate Management]
+    end
+
+    subgraph Layer3["🎫 Layer 3: Identity & Access"]
+        subgraph AuthLayer["Authentication"]
+            LOGIN[Login System]
+            MFA[Multi-Factor Authentication<br/>Future Enhancement]
+            LOCKOUT[Account Lockout<br/>3 Failed Attempts]
+            PWD_POLICY[Password Policy<br/>Complexity + Expiry]
+        end
+        
+        subgraph AuthzLayer["Authorization"]
+            RBAC[Role-Based Access Control]
+            ROLES[Roles: Holder/Agent/Staff]
+            PERMISSION[Fine-grained Permissions]
+        end
+        
+        SESSION[Session Management<br/>15-min Timeout]
+    end
+
+    subgraph Layer4["💻 Layer 4: Application Security"]
+        INPUT_VAL[Input Validation<br/>Server-side]
+        OUTPUT_ENC[Output Encoding<br/>XSS Prevention]
+        SQL_PROTECT[Parameterized Queries<br/>SQL Injection Prevention]
+        CSRF[CSRF Protection<br/>Token-based]
+        SEC_HEADERS[Security Headers<br/>CSP, X-Frame-Options]
+        ERROR_HANDLE[Secure Error Handling<br/>No Info Disclosure]
+    end
+
+    subgraph Layer5["📄 Layer 5: Data Security"]
+        subgraph EncryptionLayer["Encryption"]
+            ENCRYPT_TRANSIT[Encryption in Transit<br/>TLS 1.2+]
+            ENCRYPT_REST[Encryption at Rest<br/>AES-256]
+            KEY_MGT[Key Management<br/>Key Vault/KMS]
+        end
+        
+        subgraph DataProtection["Data Protection"]
+            HASH[Password Hashing<br/>bcrypt/Argon2]
+            MASK[Data Masking<br/>PII/PHI]
+            TOKENIZE[Tokenization<br/>Sensitive Data]
+        end
+        
+        DOC_SCAN[Document Scanning<br/>Malware Detection]
+        BACKUP_ENC[Encrypted Backups<br/>Secure Storage]
+    end
+
+    subgraph Layer6["📊 Layer 6: Monitoring & Logging"]
+        AUDIT[Audit Logging<br/>All Critical Events]
+        SIEM[SIEM System<br/>Centralized Logging]
+        ANOMALY[Anomaly Detection<br/>Behavioral Analysis]
+        ALERT[Real-time Alerting<br/>Security Events]
+        LOG_PROTECT[Log Protection<br/>Immutable Storage]
+    end
+
+    subgraph Layer7["⚡ Layer 7: Incident Response"]
+        INCIDENT[Incident Response Plan]
+        FORENSICS[Digital Forensics<br/>Evidence Collection]
+        RECOVERY[Disaster Recovery<br/>Business Continuity]
+        PATCH[Patch Management<br/>Vulnerability Remediation]
+    end
+
+    %% Connections between layers
+    Internet[Internet Users] --> FIREWALL
+    FIREWALL --> WAF
+    WAF --> DDOS
+    DDOS --> IDS
+    IDS --> DMZ
+    
+    VPN --> INTRANET
+    DMZ --> TLS
+    INTRANET --> TLS
+    TLS --> LOGIN
+    
+    LOGIN --> LOCKOUT
+    LOGIN --> PWD_POLICY
+    LOGIN --> MFA
+    LOGIN --> SESSION
+    LOGIN --> RBAC
+    
+    RBAC --> ROLES
+    ROLES --> PERMISSION
+    
+    SESSION --> INPUT_VAL
+    PERMISSION --> INPUT_VAL
+    INPUT_VAL --> OUTPUT_ENC
+    OUTPUT_ENC --> SQL_PROTECT
+    SQL_PROTECT --> CSRF
+    CSRF --> SEC_HEADERS
+    SEC_HEADERS --> ERROR_HANDLE
+    
+    ERROR_HANDLE --> ENCRYPT_TRANSIT
+    ENCRYPT_TRANSIT --> ENCRYPT_REST
+    ENCRYPT_REST --> KEY_MGT
+    KEY_MGT --> HASH
+    HASH --> MASK
+    MASK --> TOKENIZE
+    TOKENIZE --> DOC_SCAN
+    DOC_SCAN --> BACKUP_ENC
+    
+    BACKUP_ENC --> DB_NET
+    
+    %% All layers log to monitoring
+    FIREWALL -.->|Logs| AUDIT
+    WAF -.->|Logs| AUDIT
+    IDS -.->|Logs| AUDIT
+    LOGIN -.->|Logs| AUDIT
+    LOCKOUT -.->|Logs| AUDIT
+    RBAC -.->|Logs| AUDIT
+    PERMISSION -.->|Logs| AUDIT
+    SESSION -.->|Logs| AUDIT
+    INPUT_VAL -.->|Logs| AUDIT
+    DOC_SCAN -.->|Logs| AUDIT
+    
+    AUDIT --> SIEM
+    SIEM --> ANOMALY
+    ANOMALY --> ALERT
+    SIEM --> LOG_PROTECT
+    
+    %% Monitoring triggers incident response
+    ALERT -.->|Critical Events| INCIDENT
+    INCIDENT --> FORENSICS
+    INCIDENT --> RECOVERY
+    INCIDENT --> PATCH
+
+    %% Security Requirements Mapping
+    subgraph Requirements["📋 Key Requirements Addressed"]
+        REQ1[Account lockout after 3 attempts]
+        REQ2[Manual admin unlock only]
+        REQ3[15-minute session timeout]
+        REQ4[Role-based access control]
+        REQ5[Document malware scanning]
+        REQ6[PII/PHI protection]
+        REQ7[Comprehensive audit trail]
+        REQ8[TLS encryption]
+    end
+
+    LOCKOUT -.->|Implements| REQ1
+    LOGIN -.->|Implements| REQ2
+    SESSION -.->|Implements| REQ3
+    RBAC -.->|Implements| REQ4
+    DOC_SCAN -.->|Implements| REQ5
+    MASK -.->|Implements| REQ6
+    AUDIT -.->|Implements| REQ7
+    TLS -.->|Implements| REQ8
+
+    %% Styling
+    classDef layer1 fill:#ffebee,stroke:#c62828,stroke-width:3px
+    classDef layer2 fill:#fce4ec,stroke:#ad1457,stroke-width:3px
+    classDef layer3 fill:#f3e5f6,stroke:#6a1b9a,stroke-width:3px
+    classDef layer4 fill:#ede7f6,stroke:#4527a0,stroke-width:3px
+    classDef layer5 fill:#e8eaf6,stroke:#283593,stroke-width:3px
+    classDef layer6 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    classDef layer7 fill:#e0f2f1,stroke:#00695c,stroke-width:3px
+    classDef req fill:#f1f8e9,stroke:#558b2f,stroke-width:2px
+    
+    class FIREWALL,WAF,DDOS,IDS layer1
+    class DMZ,INTRANET,DB_NET,VPN,TLS layer2
+    class LOGIN,MFA,LOCKOUT,PWD_POLICY,RBAC,ROLES,PERMISSION,SESSION layer3
+    class INPUT_VAL,OUTPUT_ENC,SQL_PROTECT,CSRF,SEC_HEADERS,ERROR_HANDLE layer4
+    class ENCRYPT_TRANSIT,ENCRYPT_REST,KEY_MGT,HASH,MASK,TOKENIZE,DOC_SCAN,BACKUP_ENC layer5
+    class AUDIT,SIEM,ANOMALY,ALERT,LOG_PROTECT layer6
+    class INCIDENT,FORENSICS,RECOVERY,PATCH layer7
+    class REQ1,REQ2,REQ3,REQ4,REQ5,REQ6,REQ7,REQ8 req
